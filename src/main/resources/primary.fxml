@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane id="anchorPaneFXML" fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="850.0" prefWidth="1187.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXMLController">
+   <children>
+      <ImageView id="executionTimeFXML" fitHeight="860.0" fitWidth="691.0" layoutX="4.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true" style="visibility: true;">
+         <image>
+            <Image url="@images/KPL_Logo_big.png" />
+         </image>
+      </ImageView>
+      <RadioButton id="transNew" fx:id="transNew" layoutX="161.0" layoutY="78.0" mnemonicParsing="false" onAction="#setVisibility" prefHeight="18.0" prefWidth="71.0" text="New">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </RadioButton>
+      <RadioButton id="transCancelFXML" fx:id="transCancel" layoutX="228.0" layoutY="78.0" mnemonicParsing="false" onAction="#setVisibility" prefHeight="18.0" prefWidth="71.0" text="Cancel">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </RadioButton>
+      <RadioButton id="transCorrectionFXML" fx:id="transCorrection" layoutX="303.0" layoutY="78.0" mnemonicParsing="false" onAction="#setVisibility" prefHeight="18.0" prefWidth="122.0" text="Cancel and Correct">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </RadioButton>
+      <Text layoutX="42.0" layoutY="61.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Required fields are marked with an *" />
+      <TextField id="originalIDFXML" fx:id="originalID" disable="true" layoutX="431.0" layoutY="74.0" prefHeight="26.0" prefWidth="200.0" promptText="Original Trade Id *" visible="false" />
+      <Pane layoutX="4.0" maxWidth="1.7976931348623157E308" prefHeight="41.0" prefWidth="1183.0" style="-fx-background-color: #989898;">
+         <children>
+            <Text fill="WHITE" layoutX="254.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="IIROC Report Creation">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Text>
+            <ImageView id="helpButtonFXML" fx:id="helpButton" fitHeight="28.0" fitWidth="31.0" layoutX="617.0" layoutY="7.0" onMousePressed="#openHelpDialog" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/baseline_help_outline_black_48dp.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
+      <Pane prefHeight="850.0" prefWidth="35.0" style="-fx-background-color: #E38F2B;" />
+      <GridPane layoutX="71.0" layoutY="135.0" prefHeight="554.0" prefWidth="548.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="208.0" minWidth="10.0" prefWidth="200.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="60.0" minWidth="10.0" prefWidth="50.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="208.0" minWidth="10.0" prefWidth="200.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="60.0" minWidth="10.0" prefWidth="40.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="152.0" minWidth="10.0" prefWidth="69.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <TextField id="securityIDFXML" fx:id="securityID" promptText="Security Identifier *" />
+            <ComboBox id="securityIDTypeFXML" fx:id="securityIDType" prefHeight="29.0" prefWidth="212.0" promptText="Security ID Type *" GridPane.columnIndex="2" />
+            <TextField id="tradeIDFXML" fx:id="tradeID" promptText="Trade Number *" GridPane.rowIndex="1" />
+            <TextField id="cancelTradeIDFXML" fx:id="cancelTradeID" promptText="Cancellation Trade Number *" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <TextField id="executionDateFXML" fx:id="executionDate" promptText="Execution Date *" GridPane.rowIndex="2" />
+            <TextField id="executionTimeFXML" fx:id="executionTime" prefHeight="26.0" prefWidth="176.0" promptText="Execution Time *" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <TextField id="settlementDateFXML" fx:id="settlementDate" promptText="Settlement Date *" GridPane.rowIndex="3" />
+            <ComboBox id="traderIDFXML" fx:id="traderID" prefHeight="28.0" prefWidth="206.0" promptText="Trader ID *" GridPane.rowIndex="4" />
+            <TextField id="reportingDealerIDFXML" fx:id="reportingDealerID" disable="true" promptText="Reporting Dealer ID *" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+            <ComboBox id="counterPartyIDFXML" fx:id="counterPartyID" prefHeight="29.0" prefWidth="211.0" promptText="Counterparty ID" GridPane.rowIndex="5" />
+            <ComboBox id="counterPartyTypeFXML" fx:id="counterPartyType" prefHeight="29.0" prefWidth="226.0" promptText="Counterparty Type *" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+            <TextField id="customerAccountIDFXML" fx:id="customerAccountID" promptText="Customer Account ID" GridPane.rowIndex="6" />
+            <ComboBox id="customerAccountLEIFXML" fx:id="customerAccountLEI" prefHeight="29.0" prefWidth="217.0" promptText="Customer LEI" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+            <ChoiceBox id="customerAccountTypeFXML" fx:id="customerAccountType" prefHeight="28.0" prefWidth="111.0" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
+            <ComboBox id="introdCarryFXML" fx:id="introDCarry" prefHeight="28.0" prefWidth="221.0" promptText="IntroD Carry *" GridPane.rowIndex="7" />
+            <ComboBox id="electronicExecutionFXML" fx:id="electronicExecution" prefHeight="29.0" prefWidth="232.0" promptText="Electronic Execution *" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+            <ComboBox id="tradingVenueIDFXML" fx:id="tradingVenueID" prefHeight="28.0" prefWidth="224.0" promptText="Trading Venue ID" GridPane.rowIndex="8" />
+            <TextField id="quantityFXML" fx:id="quantity" prefHeight="26.0" prefWidth="139.0" promptText="Quantity *" GridPane.rowIndex="9" />
+            <TextField id="priceFXML" fx:id="price" prefHeight="26.0" prefWidth="176.0" promptText="Price *" GridPane.columnIndex="2" GridPane.rowIndex="9" />
+            <ChoiceBox id="sideFXML" fx:id="side" prefHeight="28.0" prefWidth="72.0" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="9" />
+            <TextField id="bechmarkSecurityIDFXML" fx:id="benchmarkSecurityID" prefHeight="24.0" prefWidth="169.0" promptText="Benchmark Security ID" GridPane.rowIndex="10" />
+            <ComboBox id="benchmarkSecurityIDTypeFXML" fx:id="benchmarkSecurityIDType" prefHeight="29.0" prefWidth="256.0" promptText="Benchmark ID Type" GridPane.columnIndex="2" GridPane.rowIndex="10" />
+            <TextField id="yieldFXML" fx:id="yield" promptText="Yield *" GridPane.rowIndex="11" />
+            <TextField id="commissionFMXL" fx:id="commission" prefHeight="26.0" prefWidth="176.0" promptText="Commission" GridPane.columnIndex="2" GridPane.rowIndex="11" />
+            <ChoiceBox id="capacityFXML" fx:id="capacity" prefHeight="28.0" prefWidth="82.0" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="11" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="#####" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+               <font>
+                  <Font size="8.0" />
+               </font>
+            </Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="YYYYMMDD" wrappingWidth="44.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+               <font>
+                  <Font size="8.0" />
+               </font>
+            </Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="YYYYMMDD" wrappingWidth="44.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+               <font>
+                  <Font size="8.0" />
+               </font>
+            </Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="HH:MM:SS" GridPane.columnIndex="3" GridPane.rowIndex="2">
+               <font>
+                  <Font size="8.0" />
+               </font>
+            </Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Customer Acc Type" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="BOTTOM" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Side *" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="8" GridPane.valignment="BOTTOM" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Capacity *" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="10" GridPane.valignment="BOTTOM" />
+            <ImageView fitHeight="31.0" fitWidth="35.0" onMousePressed="#refreshAllFields" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <image>
+                  <Image url="@images/baseline_refresh_black_48dp.png" />
+               </image>
+            </ImageView>
+
+            <Text id="correctionNumbersFXML" fx:id="correctionNumbers" strokeType="OUTSIDE" strokeWidth="0.0" text="#####" textAlignment="CENTER" visible="false" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+               <font>
+                  <Font size="8.0" />
+               </font>
+            </Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+         </children>
+      </GridPane>
+      <GridPane alignment="CENTER" layoutX="94.0" layoutY="643.0" prefHeight="92.0" prefWidth="469.0">
+         <columnConstraints>
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="130.0" minWidth="10.0" prefWidth="130.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="130.0" minWidth="10.0" prefWidth="130.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="130.0" minWidth="10.0" prefWidth="130.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="130.0" minWidth="10.0" prefWidth="130.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <ChoiceBox id="primaryMarketFXML" fx:id="primaryMarket" prefHeight="28.0" prefWidth="42.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+            <ChoiceBox id="relatedPTYFXML" fx:id="relatedPTY" prefHeight="28.0" prefWidth="39.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <ChoiceBox id="nonResidentFXML" fx:id="nonResident" prefHeight="28.0" prefWidth="40.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <ChoiceBox id="feeBasedAccountFXML" fx:id="feeBasedAccount" prefHeight="28.0" prefWidth="42.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Primary Market *" wrappingWidth="105.84375" GridPane.halignment="CENTER" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Related Party *" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Non-Resident *" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Fee-Based *" GridPane.columnIndex="3" />
+         </children>
+      </GridPane>
+      <Button id="createReportButtonFXML" fx:id="createReportButton" layoutX="268.0" layoutY="804.0" mnemonicParsing="false" onAction="#createLogForm" style="-fx-background-color: #E38F2B;" text="Create Report File" />
+      <Text id="errorTextFXML" fx:id="errorText" fill="#0bc915" layoutX="270.0" layoutY="61.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please fill in all required fields." visible="false" wrappingWidth="369.96092224121094" />
+      <Text layoutX="279.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+      <Text layoutX="44.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Transaction Type *" />
+      <Line endX="599.0" layoutX="51.0" layoutY="107.0" startX="-12.0" />
+      <Line endX="5.0" endY="1135.0" layoutX="649.0" layoutY="-285.0" startX="5.0" startY="285.0" />
+      <TableView id="tableViewFXML" fx:id="tableView" layoutX="667.0" layoutY="135.0" prefHeight="609.0" prefWidth="505.0" />
+      <Button id="browseButtonFXML" fx:id="browseButton" layoutX="975.0" layoutY="94.0" mnemonicParsing="false" onAction="#openFileExplorer" style="-fx-background-color: #E38F2B;" text="Browse files" />
+      <Text layoutX="847.0" layoutY="78.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Upload .csv file to table below" />
+      <Button id="moveButtonFXML" fx:id="moveButton" layoutX="904.0" layoutY="804.0" mnemonicParsing="false" onAction="#moveData" style="-fx-background-color: #E38F2B;" text="Move" />
+      <Text layoutX="777.0" layoutY="772.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select the desired trade in the table above, then click below to move it to Report Creation" textAlignment="CENTER" wrappingWidth="299.0" />
+      <TextField id="selectFileTextFXML" fx:id="selectedFileText" layoutX="761.0" layoutY="94.0" prefHeight="26.0" prefWidth="197.0" />
+   </children>
+</AnchorPane>
