@@ -5,24 +5,27 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import javax.swing.*;
 import java.io.*;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.UnaryOperator;
-import java.util.logging.Handler;
+import java.util.prefs.Preferences;
 import java.util.regex.Pattern;
 
 public class FXMLController implements Initializable {
@@ -31,6 +34,7 @@ public class FXMLController implements Initializable {
     private static final int CHOICE_FIELDTYPE = 2;
     private static final int COMBO_FIELDTYPE = 3;
 
+    public static String PREF_LOCATION;
     private Stage stage;
     private ACompletedForm selectedForm;
 
@@ -118,8 +122,8 @@ public class FXMLController implements Initializable {
     private String[] fieldVariables = new String[30];
 
     private TextField[] allTheTextFields = new TextField[12];
-    private ChoiceBox[] allTheChoiceBoxes = new ChoiceBox[6];
-    private ComboBox[] allTheComboBoxes = new ComboBox[5];
+    private ChoiceBox[] allTheChoiceBoxes = new ChoiceBox[7];
+    private ComboBox[] allTheComboBoxes = new ComboBox[6];
 
     private AllTheDealers allTheDealers = new AllTheDealers();
     private TestingInputs testingInputs = new TestingInputs();
@@ -176,17 +180,24 @@ public class FXMLController implements Initializable {
                             benchmarkSecurityIDType.getSelectionModel().getSelectedIndex(), yield.getText(), commission.getText(), capacity.getSelectionModel().getSelectedIndex()+1,
                             primaryMarket.getValue(), relatedPTY.getValue(), nonResident.getValue(), feeBasedAccount.getValue());
 
-            if(whichRadioButton() == 0 || whichRadioButton() == 1) {
+            if(whichRadioButton() == 0) {
+                aCompletedForm.setORIG_TRADE_ID("");
+                String aFile = aCompletedForm.createCSVFormat();
+                aCompletedForm.writeToFile(aFile);
+            } else if (whichRadioButton() == 1){
                 String aFile = aCompletedForm.createCSVFormat();
                 aCompletedForm.writeToFile(aFile);
             } else if (whichRadioButton() == 2){
                 // instead of having corrections, instead it will produce a cancelled trade line and then a new trade line afterwards //
-                selectedForm.setTransType(1);
-                selectedForm.setOriginalTradeID(originalID.getText());
-                selectedForm.setTradeID(cancelTradeID.getText()); // the cancelID field becomes the new tradeID //
+                selectedForm.setTRANS_TYPE(1);
+                selectedForm.setORIG_TRADE_ID(originalID.getText());
+                selectedForm.setTRADE_ID(cancelTradeID.getText()); // the cancelID field becomes the new tradeID //
                 String firstLineOfFile = selectedForm.createCSVFormat(); // a cancel trade //
-                aCompletedForm.setTransType(0);
-                aCompletedForm.setOriginalTradeID("");
+                aCompletedForm.setTRANS_TYPE(0);
+                aCompletedForm.setORIG_TRADE_ID("");
+                /* the TradeID here has to start with the date of the trade it is cancelling. It also has a random number <80000 added so it doesn't overlap with anything made
+                 on that previous day (they all start with 80000) */
+                aCompletedForm.setTRADE_ID(selectedForm.getEXECUTION_DATE().substring(0,8) + String.valueOf(new Random().nextInt(80000)));
                 String secondLineOfFile = aCompletedForm.createCSVFormat(); // a new trade //
                 aCompletedForm.writeToFile(firstLineOfFile, secondLineOfFile);
             }
@@ -195,9 +206,15 @@ public class FXMLController implements Initializable {
         }
     }
 
+    // Methods during initialization. Setting up fields and appropriate data //
     @FXML
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // Searching for save location preferences. Otherwise sets user.home //
+        Preferences preferences = Preferences.userRoot();
+        PREF_LOCATION = preferences.get("PREF_LOCATION", System.getProperty("user.home"));
+
+        // Setting all the fields //
         securityIDType.setItems(secIDTypeOptions);
         traderID.setItems(traderIDOptions);
         counterPartyID.setItems(FXCollections.observableArrayList(allTheDealers.getAllDealerNames("--CounterParty ID--")));
@@ -224,6 +241,13 @@ public class FXMLController implements Initializable {
         for(int i = 0; i < fields.length; i++){
             fieldVariables[i] = fields[i].getName();
         }
+
+        setCompGeneratedFields();
+
+
+
+
+
 
         // don't talk to me about this part. I just copy pasted someone's code so I could have commas while typing numbers //
         // I can't even figure out how to move it into its own extended TextFormatter class -_- //
@@ -280,14 +304,15 @@ public class FXMLController implements Initializable {
 
                 return change;
             }}));
-        setCompGeneratedFields();
+
+
     }
 
     private void setCompGeneratedFields(){
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
         Date date = new Date();
         executionDate.setText(formatter.format(date));
-        reportingDealerID.setText("IIROCOOOOOOOOOOOKERN");
+        reportingDealerID.setText("549300GNS5HNF05WRY38");
         introDCarry.getSelectionModel().select(1);
         traderID.getSelectionModel().select(1);
         electronicExecution.getSelectionModel().select(2);
@@ -331,13 +356,17 @@ public class FXMLController implements Initializable {
         allTheChoiceBoxes[3] = relatedPTY;
         allTheChoiceBoxes[4] = nonResident;
         allTheChoiceBoxes[5] = feeBasedAccount;
+        allTheChoiceBoxes[6] = customerAccountType;
 
         allTheComboBoxes[0] = securityIDType;
         allTheComboBoxes[1] = electronicExecution;
         allTheComboBoxes[2] = counterPartyType;
         allTheComboBoxes[3] = traderID;
         allTheComboBoxes[4] = introDCarry;
+        allTheComboBoxes[5] = benchmarkSecurityIDType;
     }
+
+    // Methods for checking and responding to inputs //
 
     private boolean isCorrectInputTypeTextFields(TextField textField){
         String theField = textField.getId();
@@ -422,7 +451,8 @@ public class FXMLController implements Initializable {
         switch (fieldType){
             case 1:
                 TextField theText = (TextField) theField;
-                theText.setStyle("-fx-text-fill: #c71c1c"); //TODO: this aint changing... lol wtf
+                theText.setStyle("-fx-text-fill: #f54a32;");
+                errorText.setFill(Color.valueOf("#f54a32"));
                 break;
             case 2:
                 ChoiceBox theChoiceBox = (ChoiceBox) theField;
@@ -436,9 +466,10 @@ public class FXMLController implements Initializable {
     }
 
     private void createSuccessResponse(){
+        // Green text at the top that says "Success!" for 3 seconds when a file a successfully been written to //
         errorText.setVisible(true);
         errorText.setText("Success!");
-        errorText.setStyle("-fx-text-inner-color: green;"); // TODO: why tf is this not changing colour. //
+        errorText.setFill(Color.GREEN);
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -448,6 +479,8 @@ public class FXMLController implements Initializable {
         ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
         scheduledExecutorService.schedule(runnable, 3, TimeUnit.SECONDS);
     }
+
+    // Methods for dealing with general file I/O and selection //
 
     @FXML
     private void openFileExplorer(ActionEvent event){
@@ -462,6 +495,25 @@ public class FXMLController implements Initializable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    @FXML
+    public void setSaveLocation(MouseEvent mouseEvent) {
+        JFileChooser jFileChooser = new JFileChooser();
+        jFileChooser.setDialogTitle("Set Save Location");
+        jFileChooser.setApproveButtonText("Select Folder");
+        if(PREF_LOCATION.equals(".")){
+            jFileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+        } else {
+            jFileChooser.setCurrentDirectory(new File(PREF_LOCATION));
+        }
+        jFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        jFileChooser.setAcceptAllFileFilterUsed(false);
+        if (jFileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            Preferences preferences = Preferences.userRoot();
+            preferences.put("PREF_LOCATION", jFileChooser.getSelectedFile().toString());
+            PREF_LOCATION = jFileChooser.getSelectedFile().toString();
         }
     }
 
@@ -507,18 +559,75 @@ public class FXMLController implements Initializable {
         }
     }
 
+    public void moveData(ActionEvent actionEvent) {
+        refreshAllFields();
+        try {
+            selectedForm = tableView.getSelectionModel().getSelectedItem();
+        } catch (NullPointerException e){
+            e.printStackTrace();
+        }
+        securityID.setText(selectedForm.getSECURITY_ID());
+        securityIDType.getSelectionModel().select(Integer.parseInt(selectedForm.getSECURITY_ID_TYPE()));
+        originalID.setText(selectedForm.getTRADE_ID());
+        executionDate.setText(selectedForm.getEXECUTION_DATE());
+        executionTime.setText(formatExecutionTime(selectedForm.getEXECUTION_TIME()));
+        settlementDate.setText(selectedForm.getSETTLEMENT_DATE());
+        traderID.getSelectionModel().select(selectedForm.getTRADER_ID());
+        reportingDealerID.setText(selectedForm.getREPORTING_DEALER_ID());
+        counterPartyType.getSelectionModel().select(Integer.parseInt(selectedForm.getCOUNTERPARTY_TYPE()));
+        counterPartyID.getSelectionModel().select(allTheDealers.getADealerName(selectedForm.getCOUNTERPARTY_ID()));
+        try {
+            customerAccountType.getSelectionModel().select(Integer.parseInt(selectedForm.getCUSTOMER_ACC_TYPE())-1);
+        } catch (NumberFormatException e){
+            customerAccountType.getSelectionModel().select(null);
+        }
+        customerAccountLEI.getSelectionModel().select(allTheDealers.getADealerName(selectedForm.getCUSTOMER_LEI()));
+        customerAccountID.setText(selectedForm.getCUSTOMER_ACCOUNT_ID());
+        introDCarry.getSelectionModel().select(Integer.parseInt(selectedForm.getINTROD_CARRY()));
+        electronicExecution.getSelectionModel().select(selectedForm.getELECTRONIC_EXECUTION());
+        tradingVenueID.getSelectionModel().select(allTheDealers.getADealerName(selectedForm.getTRADING_VENUE_ID()));
+        side.getSelectionModel().select(Integer.parseInt(selectedForm.getSIDE())-1);
+        quantity.setText(String.valueOf(selectedForm.getQUANTITY()));
+        price.setText(String.valueOf(selectedForm.getPRICE()));
+        benchmarkSecurityID.setText(selectedForm.getBENCHMARK_SEC_ID());
+        try {
+            benchmarkSecurityIDType.getSelectionModel().select(Integer.parseInt(selectedForm.getBENCHMARK_SEC_ID_TYPE()));
+        } catch (NumberFormatException f){
+            benchmarkSecurityIDType.getSelectionModel().select(0);
+        }
+        yield.setText(String.valueOf(selectedForm.getYIELD()));
+        commission.setText(selectedForm.getCOMMISSION());
+        capacity.getSelectionModel().select(Integer.parseInt(selectedForm.getCAPACITY())-1);
+        primaryMarket.getSelectionModel().select(stupidWtvrPants(String.valueOf(selectedForm.getPRIMARY_MARKET())));
+        relatedPTY.getSelectionModel().select(stupidWtvrPants(String.valueOf(selectedForm.getRELATED_PTY())));
+        nonResident.getSelectionModel().select(stupidWtvrPants(String.valueOf(selectedForm.getNON_RESIDENT())));
+        feeBasedAccount.getSelectionModel().select(stupidWtvrPants(String.valueOf(selectedForm.getFEE_BASED_ACCOUNT())));
+        setFunkyTradeIDsParty(whichRadioButton());
+    }
+
+    public int stupidWtvrPants(String string){
+        if(string.equals("Y")){
+            return 0;
+        } else return 1;
+    }
+
+    // Extra utility methods //
+
     @FXML
     private void refreshAllFields(){
         gatherDataFromFieldsAndCreateArraysForRequiredChecks();
         errorText.setVisible(false);
         for(ComboBox comboBox : allTheComboBoxes){
             comboBox.getSelectionModel().select(0);
+            comboBox.setStyle(null);
         }
         for(TextField textField : allTheTextFields){
+            textField.setStyle("-fx-text-fill: black");
             textField.setText("");
         }
         for(ChoiceBox choiceBox : allTheChoiceBoxes){
             choiceBox.getSelectionModel().clearSelection();
+            choiceBox.setStyle(null);
         }
         counterPartyID.getSelectionModel().select(0);
         customerAccountLEI.getSelectionModel().select(0);
@@ -544,7 +653,15 @@ public class FXMLController implements Initializable {
         return tradeID.getText();
     }
 
+    private String formatExecutionTime(String string){
+        if(string.matches("^(\\d:\\d\\d:\\d\\d)")){
+            string = "0" + string;
+        } return string;
+    }
+
     public void setVisibility(ActionEvent actionEvent) {
+        // Setting visibility of various nodes that change depending on the radio button (Transaction Type) selected //
+        // Also sets the appropriate TradeIDs for most scenarios (except for when "moving". It's called on its own there)
         Stage stageTheEventSourceNodeBelongs = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
         if(actionEvent.getSource().toString().contains("transNew")){
             originalID.setVisible(false);
@@ -571,59 +688,9 @@ public class FXMLController implements Initializable {
         }
     }
 
-    public void moveData(ActionEvent actionEvent) {
-        try {
-            selectedForm = tableView.getSelectionModel().getSelectedItem();
-        } catch (NullPointerException e){
-            e.printStackTrace();
-        }
-        securityID.setText(selectedForm.getSecurityID());
-        securityIDType.getSelectionModel().select(Integer.parseInt(selectedForm.getSecurityIDType()));
-        originalID.setText(selectedForm.getTradeID());
-        executionDate.setText(selectedForm.getExecutionDate());
-        executionTime.setText(selectedForm.getExecutionTime());
-        settlementDate.setText(selectedForm.getSettlementDate());
-        traderID.getSelectionModel().select(selectedForm.getTraderID());
-        reportingDealerID.setText(selectedForm.getReportingDealerID());
-        counterPartyType.getSelectionModel().select(Integer.parseInt(selectedForm.getCounterPartyType()));
-        counterPartyID.getSelectionModel().select(allTheDealers.getADealerName(selectedForm.getCounterPartyID()));
-        try {
-            customerAccountType.getSelectionModel().select(Integer.parseInt(selectedForm.getCustomerAccType())-1);
-        } catch (NumberFormatException e){
-            customerAccountType.getSelectionModel().select(null);
-        }
-        customerAccountLEI.getSelectionModel().select(allTheDealers.getADealerName(selectedForm.getCustomerLEI()));
-        customerAccountID.setText(selectedForm.getCustomerAccountID());
-        introDCarry.getSelectionModel().select(Integer.parseInt(selectedForm.getIntroDCarry()));
-        electronicExecution.getSelectionModel().select(selectedForm.getElectronicExecution());
-        tradingVenueID.getSelectionModel().select(allTheDealers.getADealerName(selectedForm.getTradingVenueID()));
-        side.getSelectionModel().select(Integer.parseInt(selectedForm.getSide())-1);
-        quantity.setText(String.valueOf(selectedForm.getQuantity()));
-        price.setText(String.valueOf(selectedForm.getPrice()));
-        benchmarkSecurityID.setText(selectedForm.getBenchmarkSecurityID());
-        try {
-            benchmarkSecurityIDType.getSelectionModel().select(Integer.parseInt(selectedForm.getBenchmarkSecurityIDType()));
-        } catch (NumberFormatException f){
-            benchmarkSecurityIDType.getSelectionModel().select(0);
-        }
-        yield.setText(String.valueOf(selectedForm.getYield()));
-        commission.setText(selectedForm.getCommission());
-        capacity.getSelectionModel().select(Integer.parseInt(selectedForm.getCapacity())-1);
-        primaryMarket.getSelectionModel().select(stupidWtvrPants(String.valueOf(selectedForm.getPrimaryMarket())));
-        relatedPTY.getSelectionModel().select(stupidWtvrPants(String.valueOf(selectedForm.getRelatedParty())));
-        nonResident.getSelectionModel().select(stupidWtvrPants(String.valueOf(selectedForm.getNonResident())));
-        feeBasedAccount.getSelectionModel().select(stupidWtvrPants(String.valueOf(selectedForm.getFeeBasedAccount())));
-        setFunkyTradeIDsParty(whichRadioButton());
-    }
-
-    public int stupidWtvrPants(String string){
-        if(string.equals("Y")){
-            return 0;
-        } else return 1;
-    }
-
     @FXML
     public void openHelpDialog(MouseEvent mouseEvent) {
+        // Just the dialog for the question mark button //
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Information Dialog");
         alert.setHeaderText("How each Transaction Type works: ");
@@ -634,7 +701,12 @@ public class FXMLController implements Initializable {
                             "Cancel and Correct: Follow the directions in the added frame and select the desired trade to be cancelled. " +
                             "This will automatically set it up to become a cancelled trade entry. Now, change the desired field(s). " +
                             "TradeID will be the ID of the new trade and Cancellation Trade ID will be the TradeID of the trade to be cancelled. \n\n" +
-                            "All files will be created in the User/IIROC_Reports directory.");
+                            "Unless save location changed, all files will be created in the User/IIROC_Reports directory.");
         alert.showAndWait();
     }
+
+    public String getPREF_LOCATION(){
+        return PREF_LOCATION;
+    }
+
 }

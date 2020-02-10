@@ -17,7 +17,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="anchorPaneFXML" fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="850.0" prefWidth="1187.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXMLController">
+<AnchorPane id="anchorPaneFXML" fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="850.0" prefWidth="1187.0" xmlns="http://javafx.com/javafx/10.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXMLController">
    <children>
       <ImageView id="executionTimeFXML" fitHeight="860.0" fitWidth="691.0" layoutX="4.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true" style="visibility: true;">
          <image>
@@ -51,6 +51,11 @@
             <ImageView id="helpButtonFXML" fx:id="helpButton" fitHeight="28.0" fitWidth="31.0" layoutX="617.0" layoutY="7.0" onMousePressed="#openHelpDialog" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/baseline_help_outline_black_48dp.png" />
+               </image>
+            </ImageView>
+            <ImageView id="saveLocationFXML" fx:id="saveLocation" fitHeight="26.0" fitWidth="28.0" layoutX="585.0" layoutY="8.0" onMouseClicked="#setSaveLocation" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/baseline_save_alt_black_48dp.png" />
                </image>
             </ImageView>
          </children>
@@ -167,7 +172,7 @@
          </children>
       </GridPane>
       <Button id="createReportButtonFXML" fx:id="createReportButton" layoutX="268.0" layoutY="804.0" mnemonicParsing="false" onAction="#createLogForm" style="-fx-background-color: #E38F2B;" text="Create Report File" />
-      <Text id="errorTextFXML" fx:id="errorText" fill="#0bc915" layoutX="270.0" layoutY="61.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please fill in all required fields." visible="false" wrappingWidth="369.96092224121094" />
+      <Text id="errorTextFXML" fx:id="errorText" layoutX="270.0" layoutY="61.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please fill in all required fields." visible="false" wrappingWidth="369.96092224121094" />
       <Text layoutX="279.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" />
       <Text layoutX="44.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Transaction Type *" />
       <Line endX="599.0" layoutX="51.0" layoutY="107.0" startX="-12.0" />

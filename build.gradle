@@ -22,6 +22,8 @@ javafx {
     modules = [ 'javafx.controls', 'javafx.fxml' ]
 }
 
+mainClassName = 'MainApp'
+
 jar {
     manifest {
         attributes(
@@ -30,4 +32,3 @@ jar {
     }
 }
 
-mainClassName = 'MainApp'

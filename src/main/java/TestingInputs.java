@@ -75,24 +75,27 @@ class TestingInputs {
         String date = formatter.format(currentDate);
 
         ArrayList<Long> allTradeIDsInFile = new ArrayList<>();
-        String userHomeFolder = System.getProperty("user.home");
-        boolean fileExists = new File (userHomeFolder + "\\IIROC_Reports\\" +
-                date + "_" + reportingDealerID + "_KERN-MTRSK_DEBT.csv").isFile();
+        String path = FXMLController.PREF_LOCATION;
+        boolean fileExists = new File (path + "\\IIROC_Reports\\" +
+                date + "_549300GNS5HNF05WRY38_KERN-MTRSK_DEBT.csv").isFile();
         if (!fileExists){
-            return "10000";
+            return "80000";
         } else {
-            File file = new File (userHomeFolder + "\\IIROC_Reports\\" +
-                    date + "_" + reportingDealerID + "_KERN-MTRSK_DEBT.csv");
+            File file = new File (path + "\\IIROC_Reports\\" +
+                    date + "_549300GNS5HNF05WRY38_KERN-MTRSK_DEBT.csv");
             try {
                 BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
                 String aLine = bufferedReader.readLine();
                 while (aLine != null){
                     String[] infoInALine = aLine.split(",");
                     aLine = bufferedReader.readLine();
-                    if(!isNumerical(infoInALine[2])){
-                        continue;
+                    try {
+                        if (infoInALine[2] != null && isNumerical(infoInALine[2])) {
+                            allTradeIDsInFile.add(Long.parseLong(infoInALine[2]));
+                        }
+                    } catch (IndexOutOfBoundsException e){
+                        e.printStackTrace();
                     }
-                    allTradeIDsInFile.add(Long.parseLong(infoInALine[2]));
                 }
             } catch (IOException e) {
                 e.printStackTrace();
